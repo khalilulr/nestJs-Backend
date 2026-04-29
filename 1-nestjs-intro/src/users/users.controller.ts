@@ -1,5 +1,6 @@
-import { Body, Controller, DefaultValuePipe, Get, Param, ParseIntPipe, Post, Query } from '@nestjs/common';
+import { Body, Controller, DefaultValuePipe, Get, Param, ParseIntPipe, Post, Query, ValidationPipe } from '@nestjs/common';
 import { UsersService } from './users.service';
+import { CreateUserDto } from './dto/create-users.dto';
 
 @Controller('users')
 export class UsersController {
@@ -16,7 +17,7 @@ export class UsersController {
     }
 
     @Post()
-    createUser(@Body() user: {name: string, age: number, gender: string, isMarried: boolean }):string{
+    createUser(@Body(new ValidationPipe({transform:true})) user: CreateUserDto ):string{
         const userService= new UsersService();
         const newUser= userService.createUser(user);
         return JSON.stringify(newUser);

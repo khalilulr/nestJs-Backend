@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { CreateUserDto } from './dto/create-users.dto';
 
 @Injectable()
 export class UsersService {
@@ -10,7 +11,7 @@ export class UsersService {
     getAllUsers():{id:number,name:string,age:number,gender:string,isMarried:boolean}[]{
         return this.users;
     }
-    createUser(user:{name:string,age:number,gender:string,isMarried:boolean}):{id:number,name:string,age:number,gender:string,isMarried:boolean}{
+    createUser(user:CreateUserDto):CreateUserDto{
         const id=this.users.length+1    ;
         const newUser={id,...user};
         this.users.push(newUser);
