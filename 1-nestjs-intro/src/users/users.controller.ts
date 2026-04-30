@@ -1,7 +1,8 @@
-import { Body, Controller, DefaultValuePipe, Get, Param, ParseIntPipe, Post, Query, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, DefaultValuePipe, Get, Param, ParseIntPipe, Patch, Post, Query, ValidationPipe } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-users.dto';
 import { ParamDto } from './dto/param.dto';
+import { UpdateUserDto } from './dto/update-users.dto';
 
 @Controller('users')
 export class UsersController {
@@ -31,5 +32,13 @@ export class UsersController {
         const newUser= userService.createUser(user);
         return JSON.stringify(newUser);
     }
-    
+
+    @Patch('/:id')
+    updateUser(@Param('id',ParseIntPipe) id:number,
+               @Body(new ValidationPipe({whitelist:true,forbidNonWhitelisted:true,transform:true})) user: UpdateUserDto ):string{
+        const userService= new UsersService();
+        const updatedUser= userService.updateUser(id, user);
+        return JSON.stringify(updatedUser);
+    }
+
 }
