@@ -12,6 +12,9 @@ export class UsersService {
     getAllUsers():{id:number,name:string,age:number,gender:string,isMarried:boolean}[]{
         return this.users;
     }
+    getUserById(id:number):{id:number,name:string,age:number,gender:string,isMarried:boolean} | undefined{
+        return this.users.find((user)=>user.id===id);
+    }
     createUser(user:CreateUserDto):CreateUserDto{
         const id=this.users.length+1    ;
         const newUser={id,...user};
