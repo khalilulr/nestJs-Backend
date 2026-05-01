@@ -11,8 +11,12 @@ export class UsersController {
 
     @Get()
     getAllUsers():string{
-        const users= this.userService.getAllUsers();
-        return JSON.stringify(users);
+        try {
+            const users= this.userService.getAllUsers();
+            return JSON.stringify(users);
+        } catch (error) {
+            return JSON.stringify({error:error.message});
+        }
     }
 
     @Get('married/:isMarried')
@@ -25,11 +29,15 @@ export class UsersController {
         return users;
 
     }
-    
+
     @Get('/:id')
     getUserById(@Param('id',ParseIntPipe) id: number ):string{
-        const user=this.userService.getAllUsers().find((user)=>user.id===id);
-        return JSON.stringify(user);
+          try {
+            const users= this.userService.getUserById(id);
+            return JSON.stringify(users);
+        } catch (error) {
+            return JSON.stringify({error:error.message});
+        }
     }
 
     @Post()

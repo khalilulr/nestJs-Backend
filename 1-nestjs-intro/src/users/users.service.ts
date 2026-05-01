@@ -1,23 +1,32 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable,forwardRef } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-users.dto';
 import { UpdateUserDto } from './dto/update-users.dto';
+import { AuthService } from 'src/auth/auth.service';
 
 @Injectable()
 export class UsersService {
-    users:{id:number,name:string,age:number,gender:string,isMarried:boolean}[]=[
-        {id:1,name:"John",age:25,gender:"male",isMarried:false},
-        {id:2,name:"Jane",age:30,gender:"female",isMarried:true},
-        {id:3,name:"Doe",age:28,gender:"male ",isMarried:false},
+    constructor(@Inject(forwardRef(() => AuthService)) private readonly authService:AuthService){}
+    users:{id:number,name:string,age:number,gender:string,isMarried:boolean,password:string}[]=[
+        {id:1,name:"John",age:25,gender:"male",isMarried:false,password:"password"},
+        {id:2,name:"Jane",age:30,gender:"female",isMarried:true,password:"password"},
+        {id:3,name:"Doe",age:28,gender:"male ",isMarried:false,password:"password"},
     ]
-    getAllUsers():{id:number,name:string,age:number,gender:string,isMarried:boolean}[]{
+    getAllUsers():{id:number,name:string,age:number,gender:string,isMarried:boolean,password:string}[]{
+        if(!this.authService.isAuthenticated){
+            throw new Error("Unauthorized");
+        }
         return this.users;
     }
-    getUserById(id:number):{id:number,name:string,age:number,gender:string,isMarried:boolean} | undefined{
+    getUserById(id:number):{id:number,name:string,age:number,gender:string,isMarried:boolean,password:string} | undefined{
+        if(!this.authService.isAuthenticated){
+            throw new Error("Unauthorized");
+        }
+
         return this.users.find((user)=>user.id===id);
     }
     createUser(user:CreateUserDto):CreateUserDto{
         const id=this.users.length+1    ;
-        const newUser={id,...user};
+        const newUser={id,...user,password:"password"};
         this.users.push(newUser);
         return newUser;
     }
