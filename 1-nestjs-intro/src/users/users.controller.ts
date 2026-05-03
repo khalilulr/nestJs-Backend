@@ -8,51 +8,29 @@ import { UpdateUserDto } from './dto/update-users.dto';
 export class UsersController {
     constructor(private userService:UsersService){
     }
-
     @Get()
-    getAllUsers():string{
-        try {
-            const users= this.userService.getAllUsers();
-            return JSON.stringify(users);
-        } catch (error) {
-            return JSON.stringify({error:error.message});
-        }
-    }
-
-    @Get('married/:isMarried')
-    getMarriedUsers(@Query('limit',new DefaultValuePipe(10),ParseIntPipe) limit: number, @Param(new ValidationPipe({whitelist:true,forbidNonWhitelisted:true,transform:true})) param?: ParamDto ):string{
-        const users= JSON.stringify(this.userService.getAllUsers());
-        if(param!=undefined && param.isMarried!==undefined){
-            const filteredUsers= JSON.stringify(this.userService.getAllUsers().filter((user)=>user.isMarried===param.isMarried));
-            return filteredUsers;
-        }
-        return users;
-
+    async getAllUsers() {
+        return await this.userService.getAllUsers();
     }
 
     @Get('/:id')
-    getUserById(@Param('id',ParseIntPipe) id: number ):string{
-          try {
-            const users= this.userService.getUserById(id);
-            return JSON.stringify(users);
-        } catch (error) {
-            return JSON.stringify({error:error.message});
-        }
+    async getUserById(@Param('id', ParseIntPipe) id: number) {
+        return await this.userService.getUserById(id);
     }
 
     @Post()
-    createUser(@Body(new ValidationPipe({whitelist:true,forbidNonWhitelisted:true,transform:true})) user: CreateUserDto ):string{
-        console.log(typeof user);
-        console.log(user instanceof CreateUserDto);
-        const newUser= this.userService.createUser(user);
-        return JSON.stringify(newUser);
+    async createUser(
+    @Body(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true, transform: true }))
+    user: CreateUserDto
+    ) {
+        return await this.userService.createUser(user);
     }
 
-    @Patch('/:id')
-    updateUser(@Param('id',ParseIntPipe) id:number,
-               @Body(new ValidationPipe({whitelist:true,forbidNonWhitelisted:true,transform:true})) user: UpdateUserDto ):string{
-        const updatedUser= this.userService.updateUser(id, user);
-        return JSON.stringify(updatedUser);
-    }
+    // @Patch('/:id')
+    // updateUser(@Param('id',ParseIntPipe) id:number,
+    //            @Body(new ValidationPipe({whitelist:true,forbidNonWhitelisted:true,transform:true})) user: UpdateUserDto ):string{
+    //     const updatedUser= this.userService.updateUser(id, user);
+    //     return JSON.stringify(updatedUser);
+    // }
 
 }

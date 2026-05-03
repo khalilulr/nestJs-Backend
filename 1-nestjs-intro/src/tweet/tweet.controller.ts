@@ -5,9 +5,9 @@ import { TweetService } from './tweet.service';
 export class TweetController {
     constructor(private readonly tweetService:TweetService){}
     
-    @Get()
-    getAllTweets(){
-        return this.tweetService.getAllTweets();
-    }
+    // @Get()
+    // getAllTweets(){
+    //     return this.tweetService.getAllTweets();
+    // }
 
 }
