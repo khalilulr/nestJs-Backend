@@ -1,30 +1,32 @@
 import { Inject, Injectable,forwardRef } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-users.dto';
-import { UpdateUserDto } from './dto/update-users.dto';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Profile } from 'src/profile/profile.entity';
 
 @Injectable()
 export class UsersService {
     constructor(@InjectRepository(User)
-    private userRepository:Repository<User>){}
+    private userRepository:Repository<User>,
+    @InjectRepository(Profile)
+    private profileRepository:Repository<Profile>
+){}
  
-    async getAllUsers():Promise<CreateUserDto[]>{
+    async getAllUsers(){
        return await this.userRepository.find();
     }
-    async getUserById(id:number):Promise<CreateUserDto | null>{
+    async getUserById(id:number){
        return await this.userRepository.findOne({ where: { id } });
     }
-    async createUser(user:CreateUserDto):Promise<CreateUserDto>{
-        const userExists = await this.userRepository.findOne({ where: { email: user.email } });
-        // console.log(userExists);
-        if (userExists) {
-            return 'User with this email already exists' as any;
-        }
-        let newUser = this.userRepository.create(user);
-        newUser= await this.userRepository.save(newUser);
-        return newUser;
+    async createUser(user:CreateUserDto){
+       user.profile=user.profile?user.profile:{};
+       const createProfile = this.profileRepository.create(user.profile);
+       const savedProfile = await this.profileRepository.save(createProfile);
+
+       const createUser = this.userRepository.create(user);
+       createUser.profile = savedProfile;
+       return await this.userRepository.save(createUser);
     }
     // updateUser(id:number,user:UpdateUserDto):UpdateUserDto | null{
       

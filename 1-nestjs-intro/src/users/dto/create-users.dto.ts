@@ -1,18 +1,13 @@
-import { IsEmail, IsNotEmpty, IsNumber, IsString, Max, MaxLength, MinLength } from "class-validator";
+import { IsEmail, IsNotEmpty, IsNumber, IsOptional, IsString, Max, MaxLength, MinLength } from "class-validator";
+import { CreateProfileDto } from "src/profile/dto/create.profile.dto";
 
 export class CreateUserDto{
     @IsNotEmpty()
     @MinLength(3)
     @IsString()
     @MaxLength(100)
-    firstName: string;
+    username: string;
 
-    @IsNotEmpty()
-    @MinLength(3)
-    @IsString()
-    @MaxLength(100)
-    lastName: string;
-    
     @IsEmail()
     @IsNotEmpty()
     @MaxLength(255)
@@ -22,4 +17,7 @@ export class CreateUserDto{
     @IsNotEmpty()
     @MinLength(6)
     password: string;
+
+    @IsOptional()
+    profile?:CreateProfileDto ;
 }
