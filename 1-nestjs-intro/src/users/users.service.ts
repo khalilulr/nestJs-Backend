@@ -21,11 +21,11 @@ export class UsersService {
     }
     async createUser(user:CreateUserDto){
        user.profile=user.profile?user.profile:{};
-       const createProfile = this.profileRepository.create(user.profile);
-       const savedProfile = await this.profileRepository.save(createProfile);
+    //    const createProfile = this.profileRepository.create(user.profile);
+    //    const savedProfile = await this.profileRepository.save(createProfile);
 
        const createUser = this.userRepository.create(user);
-       createUser.profile = savedProfile;
+    //    createUser.profile = savedProfile;
        return await this.userRepository.save(createUser);
     }
     // updateUser(id:number,user:UpdateUserDto):UpdateUserDto | null{

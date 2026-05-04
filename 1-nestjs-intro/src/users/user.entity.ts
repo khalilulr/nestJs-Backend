@@ -26,11 +26,13 @@ export class User{
     })
     password:string;
 
-    @OneToOne(()=>Profile)
+    @OneToOne(()=>Profile,{
+        cascade:['insert']
+    })
     @JoinColumn()
     profile:Profile;
 
-    
+
     @CreateDateColumn()
     createdAt:Date;
 
