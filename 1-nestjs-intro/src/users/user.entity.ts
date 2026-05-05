@@ -1,44 +1,44 @@
+import { profile } from "console";
 import { Profile } from "src/profile/profile.entity";
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { OneToMany } from "typeorm/browser";
 
 @Entity()
-export class User{
+export class User {
     @PrimaryGeneratedColumn()
-    id:number;
+    id: number;
 
     @Column({
-        nullable:false,
-        length:100,
-        type:"varchar"
+        nullable: false,
+        length: 100,
+        type: "varchar"
     })
-    username:string;
+    username: string;
 
 
     @Column({
-        nullable:false,
-        unique:true
+        nullable: false,
+        unique: true
     })
-    email:string;
+    email: string;
 
     @Column({
-        nullable:false
+        nullable: false
     })
-    password:string;
+    password: string;
 
-    @OneToOne(()=>Profile,{
-        cascade:['insert']
+    @OneToOne(() => Profile, (profile) => profile.user, {
+        cascade: true,
     })
-    @JoinColumn()
-    profile:Profile;
+    profile: Profile;
 
 
     @CreateDateColumn()
-    createdAt:Date;
+    createdAt: Date;
 
     @UpdateDateColumn()
-    updatedAt:Date;
+    updatedAt: Date;
 
     @DeleteDateColumn()
-    deletedAt:Date;
+    deletedAt: Date;
 }

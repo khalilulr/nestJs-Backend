@@ -14,10 +14,14 @@ export class UsersService {
 ){}
  
     async getAllUsers(){
-       return await this.userRepository.find();
+       return await this.userRepository.find({
+            relations: {
+                profile: true
+            }
+       });
     }
     async getUserById(id:number){
-       return await this.userRepository.findOne({ where: { id } });
+       return await this.userRepository.findOne({ where: { id }, relations: ['profile'] });
     }
     async createUser(user:CreateUserDto){
        user.profile=user.profile?user.profile:{};
@@ -27,6 +31,11 @@ export class UsersService {
        const createUser = this.userRepository.create(user);
     //    createUser.profile = savedProfile;
        return await this.userRepository.save(createUser);
+    }
+
+    public async deleteUser(id:number){
+       await this.userRepository.delete(id);
+       return {message:"User deleted successfully"};
     }
     // updateUser(id:number,user:UpdateUserDto):UpdateUserDto | null{
       
