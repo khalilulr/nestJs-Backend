@@ -5,8 +5,8 @@ import { UserModule } from './users/users.module';
 import { TweetModule } from './tweet/tweet.module';
 import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './users/user.entity';
 import { ProfileModule } from './profile/profile.module';
+import { HashtagModule } from './hashtag/hashtag.module';
 
 @Module({
   imports: [UserModule, TweetModule, AuthModule,TypeOrmModule.forRootAsync({
@@ -22,7 +22,7 @@ import { ProfileModule } from './profile/profile.module';
       password:'ashif1234',
       database:'nestjs-db'
     })
-  }), ProfileModule],
+  }), ProfileModule, HashtagModule],
   controllers: [AppController],
   providers: [AppService],
 })
